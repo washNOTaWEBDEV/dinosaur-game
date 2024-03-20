@@ -1,5 +1,4 @@
 import pygame
-import misc
 import screen
 from random import randint
 
@@ -14,7 +13,8 @@ cloudSizes = {
 }
 
 all_clouds = pygame.sprite.Group()
-getting_faster_rate = 0
+clouds_getting_faster_rate = 0
+
 
 class Cloud(pygame.sprite.Sprite):
     def __init__(self, cloudtype):
@@ -27,8 +27,8 @@ class Cloud(pygame.sprite.Sprite):
         self.rect.bottom = screen.height // 3 - randint(1, 7) * 15
 
     def update(self):
-        global getting_faster_rate
-        self.rect.right -= 0.8 + getting_faster_rate
+        global clouds_getting_faster_rate
+        self.rect.right -= 0.8 + clouds_getting_faster_rate
         screen.screen.blit(self.image, self.rect)
         if self.rect.right < 0:
             self.kill()

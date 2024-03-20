@@ -1,12 +1,12 @@
 import pygame
 import sys
-import screen
-import character
+from screen import screen, redraw_background_color
+from character import redamongus
 import misc
-import obstacles
-import floor_animations
-import clouds_animations
-import score
+from obstacles import Obstacle, trees, obstacleRate
+from floor_animations import floor_tiles
+from clouds_animations import Cloud, all_clouds, clouds_getting_faster_rate
+from score import display_score, final_score
 
 pygame.init()
 
@@ -15,8 +15,8 @@ clock = pygame.time.Clock()
 
 ########################
 
-loopIsRunning = True
-while loopIsRunning:
+run = True
+while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -26,43 +26,43 @@ while loopIsRunning:
         currTime = pygame.time.get_ticks()
 
         # drawing everything
-        screen.redraw_background_color()
-        obstacles.Obstacle.generate_new_tree(currTime)
-        clouds_animations.Cloud.generate_new_clouds(currTime)
-        floor_animations.floor_tiles.update()
-        obstacles.trees.update()
-        clouds_animations.all_clouds.update()
+        redraw_background_color()
+        Obstacle.generate_new_tree(currTime)
+        Cloud.generate_new_clouds(currTime)
+        floor_tiles.update()
+        trees.update()
+        all_clouds.update()
 
-        character.redamongus.get_input()
-        character.redamongus.check_for_collisions()
-        character.redamongus.update()
+        redamongus.get_input()
+        redamongus.check_for_collisions()
+        redamongus.update()
 
-        score.display_score(currTime)
+        display_score(currTime)
 
         # increasing scroll speed
         misc.scrollspeed += 0.0002
-        clouds_animations.getting_faster_rate += 0.0002
-        if obstacles.obstacleRate > 500:
-            obstacles.obstacleRate -= 0.09
+        clouds_getting_faster_rate += 0.0002
+        if obstacleRate > 500:
+            obstacleRate -= 0.09
 
     elif misc.gameover:
         # redraw
-        screen.redraw_background_color()
-        floor_animations.floor_tiles.draw(screen.screen)
-        obstacles.trees.draw(screen.screen)
-        clouds_animations.all_clouds.draw(screen.screen)
-        score.display_score(currTime)
+        redraw_background_color()
+        floor_tiles.draw(screen)
+        trees.draw(screen)
+        all_clouds.draw(screen)
+        display_score(currTime)
 
         # dying animation
         if misc.final_jump:
-            character.redamongus.dy = -13
-            character.redamongus.jumping = True
-            character.redamongus.gravity = 0.32
+            redamongus.dy = -13
+            redamongus.jumping = True
+            redamongus.gravity = 0.32
             misc.final_jump = False
-        character.redamongus.update()
+        redamongus.update()
 
-        if not character.redamongus.jumping:
-            print(f"Your final score was {score.final_score}, BTW.")
+        if not redamongus.jumping:
+            print(f"Your final score was {final_score}, BTW.")
             pygame.quit()
             sys.exit()
 
