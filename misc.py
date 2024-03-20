@@ -1,6 +1,5 @@
-mouseAlreadyClicked = False
 gameover = False
-
+stooping = False
 fps = 100
 scrollspeed = 4
 
@@ -8,4 +7,3 @@ scrollspeed = 4
 
 final_jump = True
 
-stooping = False
